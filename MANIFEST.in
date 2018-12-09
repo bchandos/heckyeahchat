@@ -1,0 +1,3 @@
+graft allo/static
+graft allo/templates
+global-exclude *.pyc
