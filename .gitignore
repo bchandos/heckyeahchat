@@ -117,5 +117,5 @@ dmypy.json
 
 # Project specific
 TODO.md
-allo/data/
-allo/static/allo_media
+heckyeahchat/data/
+heckyeahchat/static/allo_media

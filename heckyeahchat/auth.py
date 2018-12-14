@@ -3,7 +3,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import abort
 
-from rss_feed.db import get_db
+from heckyeahchat.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -82,7 +82,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('rss_feed.index'))
+    return redirect(url_for('heckyeahchat.index'))
 
 
 def login_required(view):

@@ -1,3 +1,3 @@
-graft allo/static
-graft allo/templates
+graft heckyeahchat/static
+graft heckyeahchat/templates
 global-exclude *.pyc
