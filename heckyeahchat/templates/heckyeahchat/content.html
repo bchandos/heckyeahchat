@@ -8,6 +8,7 @@
     {% if search %}
     <h2>Search results for "{{ search }}"...</h2>
     {% endif %}
+    <a href="">Previous Week</a>
 </div>
 <div class="messages">
     {% for msg in msgs %}
@@ -30,4 +31,5 @@
         </div>
         {% endfor %}
     </div>
+    <div class="footer"><a href="">Next Week</a></div>
     {% endblock %}
