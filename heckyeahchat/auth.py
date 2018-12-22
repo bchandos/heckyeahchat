@@ -3,7 +3,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import abort
 
-from heckyeahchat.db import get_db
+from .models import db, User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -13,20 +13,21 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
+
         error = None
 
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif db.execute('SELECT id FROM user WHERE username = ?', (username,)).fetchone() is not None:
+        elif User.query.filter_by(username=username).first() is not None:
             error = f'Username {username} is in use.'
 
         if not error:
-            db.execute('INSERT INTO user (username, password) VALUES (?, ?)',
-                       (username, generate_password_hash(password)))
-            db.commit()
+            u = User(username=username,
+                     password=generate_password_hash(password))
+            db.session.add(u)
+            db.session.commit()
             return redirect(url_for('auth.login'))
 
         flash(error)
@@ -39,10 +40,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)).fetchone()
+        user = User.query.filter_by(username=username).first()
         if not user:
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
@@ -61,22 +60,11 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
-    db = get_db()
+
     if not user_id:
         g.user = None
     else:
-        user_feeds = db.execute(
-            'SELECT * from user_feeds WHERE user_id = ?', (user_id,)).fetchall()
-        if user_feeds:
-            # if a user doesn't yet have added feeds, this query return None
-            g.user = db.execute('SELECT user.*, GROUP_CONCAT(user_feeds.feed_id) AS feed_group '
-                                'FROM user JOIN user_feeds ON user.id = user_feeds.user_id '
-                                'WHERE user.id = ? '
-                                'GROUP BY user.id', (user_id,)).fetchone()
-        else:
-            # fallback for if user has no added feeds, just return user fields
-            g.user = db.execute(
-                'SELECT * from user WHERE id = ?', (user_id,)).fetchone()
+        g.user = User.query.filter_by(id=user_id).first()
 
 
 @bp.route('/logout')

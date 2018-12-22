@@ -2,8 +2,19 @@ body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+div#search {
+    max-width: 50%;
+    margin: auto;
+    padding: 2em;
+    background-color: rgb(241, 241, 241);
+}
+
+div.header {
+    text-align: center;
+}
+
 div.message {
-    background-color: lightgray;
+    background-color: rgb(241, 241, 241);
     margin: 3px;
     width: 75%;
     border-radius: 10px;
@@ -45,4 +56,9 @@ div.Google, div.Lucky {
 .messages {
     max-width: 40%;
     margin: auto;
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }

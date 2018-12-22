@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} some shit {% endblock %}
+
+
+{% block body %}
+<div class="header">
+    <h1>Remarkable chatting from {{ start.strftime('%b %d, %Y') }} to {{ end.strftime('%b %d, %Y') }}</h1>
+    {% if search %}
+    <h2>Search results for "{{ search }}"...</h2>
+    {% endif %}
+</div>
+<div class="messages">
+    {% for msg in msgs %}
+    {% if 'Bill' in msg.sender %}
+    <div class="message Bill" id="{{ msg.id }}">
+        {% else %}
+        <div class="message Danny" id="{{ msg.id }}">
+            {% endif %}
+            {% if search %}
+            <a href="?chat-start={{ msg.date_time.strftime('%Y-%m-%d') }}&chat-end={{ msg.date_time.strftime('%Y-%m-%d') }}#{{ msg.id }}">
+                {% endif %}
+                <p class="sender"><strong>{{ msg.sender }}</strong></p>
+                {% if msg.msg_type == "image" %}
+                <img class="img_message" src="static/allo_media/{{ msg.message }}" />
+                {% else %}
+                <p class="text">{{ msg.message }}</p>
+                {% endif %}
+                <p class="time">{{ msg.date_time.strftime('%I:%M%p - %a, %b %d, %Y') }}</p>
+                {% if search %}</a>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
