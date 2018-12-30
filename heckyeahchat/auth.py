@@ -44,13 +44,13 @@ def login():
         user = User.query.filter_by(username=username).first()
         if not user:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user.password, password):
             error = 'Incorrect password.'
 
         if not error:
             session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('rss_feed.index'))
+            session['user_id'] = user.id
+            return redirect(url_for('heckyeahchat.index'))
 
         flash(error)
 

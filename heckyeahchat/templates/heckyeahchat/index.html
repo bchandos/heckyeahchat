@@ -4,11 +4,12 @@
 
 {% block body %}
 <div id="search">
+    <h1>Danny and Bill's Stupendous Collection of Hilarious Thoughts</h1>
     <form action="/chats" method="GET">
         <p><label for="start">Start date:</label>
             <input type="date" id="start" name="chat-start" value="2016-09-22" min="2016-09-22" max="2018-12-17"></p>
         <p><label for="end">End date:</label>
-            <input type="date" id="end" name="chat-end" min="2016-09-23" max="2018-12-17"></p>
+            <input type="date" id="end" name="chat-end" value="2018-12-17" min="2016-09-23" max="2018-12-17"></p>
         <p><label for="search">Search:</label>
             <input type="text" id="search" name="q"></p>
         <p><input type="submit" value="Submit"></p>

@@ -19,6 +19,8 @@ div.message {
     width: 75%;
     border-radius: 10px;
     padding: 3px;
+    /* float: left; */
+    margin-top: 40px;
 }
 
 p {
@@ -36,16 +38,14 @@ p {
 
 div.Danny {
     background-color: rgb(212, 233, 240);
-    float: left;
+    /* float: left; */
+    margin-right: 10%;
 }
 
 div.Bill {
     background-color: rgb(200, 252, 200);
-    float: right;
-}
-
-div.Google, div.Lucky {
-    float: left;
+    /* float: right; */
+    margin-left: 10%;
 }
 
 .img_message {
@@ -58,7 +58,62 @@ div.Google, div.Lucky {
     margin: auto;
 }
 
+div.Sun~div.Sun {
+    margin-top: 0;
+}
+
+div.Mon~div.Mon {
+    margin-top: 0;
+}
+
+div.Tue~div.Tue {
+    margin-top: 0;
+}
+
+div.Wed~div.Wed {
+    margin-top: 0;
+}
+
+div.Thu~div.Thu {
+    margin-top: 0;
+}
+
+div.Fri~div.Fri {
+    margin-top: 0;
+}
+
+div.Sat~div.Sat {
+    margin-top: 0;
+}
+
 a {
     text-decoration: none;
     color: black;
+}
+
+a>h2 {
+    text-align: center;
+}
+
+img#logo {
+    width: 1.5em;
+}
+
+nav {
+    background: lightgray;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+}
+
+.cbs {
+    visibility: hidden;
+}
+
+div.message:hover>.cbs {
+    visibility: visible;
+}
+
+.cbs:checked {
+    visibility: visible;
 }

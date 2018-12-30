@@ -8,28 +8,45 @@
     {% if search %}
     <h2>Search results for "{{ search }}"...</h2>
     {% endif %}
-    <a href="">Previous Week</a>
+
 </div>
 <div class="messages">
-    {% for msg in msgs %}
-    {% if 'Bill' in msg.sender %}
-    <div class="message Bill" id="{{ msg.id }}">
-        {% else %}
-        <div class="message Danny" id="{{ msg.id }}">
-            {% endif %}
-            {% if search %}
-            <a href="?chat-start={{ msg.date_time.strftime('%Y-%m-%d') }}&chat-end={{ msg.date_time.strftime('%Y-%m-%d') }}#{{ msg.id }}">
-                {% endif %}
-                <p class="sender"><strong>{{ msg.sender }}</strong></p>
-                {% if msg.msg_type == "image" %}
-                <img class="img_message" src="static/allo_media/{{ msg.message }}" />
+    <a href="{{ url_for('heckyeahchat.index') }}">
+        <h2>Back to Home</h2>
+    </a>
+    <a href="?chat-start={{ start|add_days(-7) }}&chat-end={{ start|add_days(-1) }}">
+        <h2>&lt; Previous
+            Week</h2>
+    </a>
+    <form>
+        {% for msg in msgs %}
+        {% if 'Bill' in msg.sender %}
+        <div class="message Bill {{ msg.date_time.strftime('%a') }}" id="{{ msg.id }}">
+            {% elif 'Danny' in msg.sender %}
+            <div class="message Danny {{ msg.date_time.strftime('%a') }}" id="{{ msg.id }}">
                 {% else %}
-                <p class="text">{{ msg.message }}</p>
-                {% endif %}
-                <p class="time">{{ msg.date_time.strftime('%I:%M%p - %a, %b %d, %Y') }}</p>
-                {% if search %}</a>{% endif %}
-        </div>
-        {% endfor %}
-    </div>
-    <div class="footer"><a href="">Next Week</a></div>
-    {% endblock %}
+                <div class="message {{ msg.date_time.strftime('%a') }}" id="{{ msg.id }}">
+                    {% endif %}
+                    {% if search %}
+                    <a href="?chat-start={{ msg.date_time.strftime('%Y-%m-%d') }}&chat-end={{ msg.date_time.strftime('%Y-%m-%d') }}#{{ msg.id }}">
+                        {% else %}
+                        <input type="checkbox" class="cbs" id="cb-{{ msg.id }}" name="cbs" value="{{ msg.id }}">
+                        {% endif %}
+                        <p class="sender"><strong>{{ msg.sender }}</strong></p>
+                        {% if msg.msg_type == "image" %}
+                        <img class="img_message" src="static/allo_media/{{ msg.message }}" />
+                        {% else %}
+                        <p class="text">{{ msg.message }}</p>
+                        {% endif %}
+                        <p class="time">{{ msg.date_time.strftime('%I:%M%p - %a, %b %d, %Y') }}</p>
+                        {% if search %}</a>{% endif %}
+                </div>
+                {% endfor %}
+                <a href="?chat-start={{ end|add_days(1) }}&chat-end={{ end|add_days(7) }}">
+                    <h2>Next Week &gt;</h2>
+                </a>
+
+                <input type="submit" accesskey="g" formmethod="GET" formaction="{{ url_for('heckyeahchat.chats_by_id') }}">
+    </form>
+</div>
+{% endblock %}

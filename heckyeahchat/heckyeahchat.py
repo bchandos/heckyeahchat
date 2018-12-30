@@ -2,6 +2,7 @@ import csv
 from flask import Blueprint, render_template, request, url_for
 
 from datetime import datetime, timedelta
+from .auth import login_required
 from .models import db, User, Conversation, Message
 from flask_sqlalchemy import SQLAlchemy
 
@@ -14,12 +15,14 @@ bp = Blueprint('heckyeahchat', __name__)
 
 
 @bp.route('/')
+@login_required
 def index():
     return render_template('heckyeahchat/index.html')
 
 
 @bp.route('/chats')
-def get_chats():
+@login_required
+def get_chats(start_id=None, stop_id=None):
     if not request.args.get('chat-start') or not request.args.get('chat-end'):
         return render_template('heckyeahchat/index.html')
     else:
@@ -41,6 +44,37 @@ def get_chats():
                 Message.date_time.between(start_date, end_date)).all()
 
     return render_template('heckyeahchat/content.html', msgs=messages, start=start_date, end=end_date, search=search)
+
+
+@bp.route('/chats_by_id')
+def chats_by_id():
+    ids = request.args.getlist('cbs')
+    start_id = ids[0]
+    stop_id = ids[-1]
+
+    start_date = Message.query.get(start_id).date_time
+    end_date = Message.query.get(stop_id).date_time
+
+    messages = Message.query.filter(
+        Message.conversation_id == 'a4ayc/80/OGda4BO/1o/V0etpOqiLx1JwB5S3beHW0s=',
+        Message.date_time.between(start_date, end_date)).all()
+
+    return render_template('heckyeahchat/content.html', msgs=messages, start=start_date, end=end_date)
+
+
+@bp.app_template_filter()
+def back_week(dt):
+    return (dt - timedelta(days=7)).strftime('%Y-%m-%d')
+
+
+@bp.app_template_filter()
+def fwd_week(dt):
+    return (dt + timedelta(days=7, seconds=1)).strftime('%Y-%m-%d')
+
+
+@bp.app_template_filter()
+def add_days(dt, days):
+    return (dt + timedelta(days=days)).strftime('%Y-%m-%d')
 
 # def get_chats(start_date, end_date):
 #     messages = list()
