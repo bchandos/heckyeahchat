@@ -10,6 +10,14 @@
     <input name="username" id="username" required>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
+    <label for="conversation">Conversation</label>
+    <select name="conversation_id" required>
+        {% for conversation in conversations %}
+        <option value="{{ conversation.id }}">
+            {{ conversation.name }}
+        </option>
+        {% endfor %}
+    </select>
     <input type="submit" value="Register">
 </form>
 {% endblock %}

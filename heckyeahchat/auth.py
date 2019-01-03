@@ -3,7 +3,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import abort
 
-from .models import db, User
+from .models import db, User, Conversation
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -13,6 +13,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        conversation_id = request.form['conversation_id']
 
         error = None
 
@@ -25,14 +26,15 @@ def register():
 
         if not error:
             u = User(username=username,
-                     password=generate_password_hash(password))
+                     password=generate_password_hash(password),
+                     conversation_id=conversation_id)
             db.session.add(u)
             db.session.commit()
             return redirect(url_for('auth.login'))
 
         flash(error)
-
-    return render_template('auth/register.html')
+    conversations = Conversation.query.all()
+    return render_template('auth/register.html', conversations=conversations)
 
 
 @bp.route('/login', methods=('GET', 'POST'))

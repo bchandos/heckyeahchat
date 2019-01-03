@@ -14,9 +14,8 @@
     <a href="{{ url_for('heckyeahchat.index') }}">
         <h2>Back to Home</h2>
     </a>
-    <a href="?chat-start={{ start|add_days(-7) }}&chat-end={{ start|add_days(-1) }}">
-        <h2>&lt; Previous
-            Week</h2>
+    <a href="{{ url_for('heckyeahchat.get_chats', chat_start=start|add_days(-7), chat_end=start|add_days(-1)) }}">
+        <h2>&lt; Previous Week</h2>
     </a>
     <form>
         {% for msg in msgs %}
@@ -28,11 +27,11 @@
                 <div class="message {{ msg.date_time.strftime('%a') }}" id="{{ msg.id }}">
                     {% endif %}
                     {% if search %}
-                    <a href="?chat-start={{ msg.date_time.strftime('%Y-%m-%d') }}&chat-end={{ msg.date_time.strftime('%Y-%m-%d') }}#{{ msg.id }}">
+                    <a href="{{ url_for('heckyeahchat.get_chats', chat_start=msg.date_time.strftime('%Y-%m-%d'), chat_end=msg.date_time.strftime('%Y-%m-%d'), _anchor=msg.id) }}">
                         {% else %}
                         <input type="checkbox" class="cbs" id="cb-{{ msg.id }}" name="cbs" value="{{ msg.id }}">
                         {% endif %}
-                        <p class="sender"><strong>{{ msg.sender }}</strong></p>
+                        <p class="sender"><strong>{{ msg.sender|letters }}</strong></p>
                         {% if msg.msg_type == "image" %}
                         <img class="img_message" src="static/allo_media/{{ msg.message }}" />
                         {% else %}
@@ -42,11 +41,12 @@
                         {% if search %}</a>{% endif %}
                 </div>
                 {% endfor %}
-                <a href="?chat-start={{ end|add_days(1) }}&chat-end={{ end|add_days(7) }}">
+                <a href="{{ url_for('heckyeahchat.get_chats', chat_start=end|add_days(1), chat_end=end|add_days(7)) }}">
                     <h2>Next Week &gt;</h2>
                 </a>
-
-                <input type="submit" accesskey="g" formmethod="GET" formaction="{{ url_for('heckyeahchat.chats_by_id') }}">
+                <div id="form_footer">
+                    <input type="submit" value="GO" accesskey="g" formmethod="GET" formaction="{{ url_for('heckyeahchat.chats_by_id') }}">
+                </div>
     </form>
 </div>
 {% endblock %}

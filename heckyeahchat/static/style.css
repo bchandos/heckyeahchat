@@ -117,3 +117,12 @@ div.message:hover>.cbs {
 .cbs:checked {
     visibility: visible;
 }
+
+div#form_footer {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    text-align: center;
+    background-color: lightgray;
+}
