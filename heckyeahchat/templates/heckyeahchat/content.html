@@ -3,6 +3,29 @@
 
 
 {% block body %}
+<script>
+
+    function showElem() {
+        var all_cbs = document.getElementsByClassName("cbs");
+        var chk = 0;
+        for (var x = 0; x < all_cbs.length; x++) {
+            if (all_cbs[x].checked) {
+                chk++;
+
+                if (chk >= 2) {
+                    document.getElementById("form_footer").style.visibility = "visible";
+                    document.getElementById("get_ids_button").disabled = false;
+                    break;
+                }
+            }
+        }
+        if (chk < 2) {
+            document.getElementById("form_footer").style.visibility = "hidden";
+            document.getElementById("get_ids_button").disabled = true;
+        }
+    }
+
+</script>
 <div class="header">
     <h1>Remarkable chatting from {{ start.strftime('%b %d, %Y') }} to {{ end.strftime('%b %d, %Y') }}</h1>
     {% if search %}
@@ -29,7 +52,7 @@
                     {% if search %}
                     <a href="{{ url_for('heckyeahchat.get_chats', chat_start=msg.date_time.strftime('%Y-%m-%d'), chat_end=msg.date_time.strftime('%Y-%m-%d'), _anchor=msg.id) }}">
                         {% else %}
-                        <input type="checkbox" class="cbs" id="cb-{{ msg.id }}" name="cbs" value="{{ msg.id }}">
+                        <input type="checkbox" class="cbs" id="cb-{{ msg.id }}" name="cbs" value="{{ msg.id }}" onclick="showElem()">
                         {% endif %}
                         <p class="sender"><strong>{{ msg.sender|letters }}</strong></p>
                         {% if msg.msg_type == "image" %}
@@ -45,7 +68,8 @@
                     <h2>Next Week &gt;</h2>
                 </a>
                 <div id="form_footer">
-                    <input type="submit" value="GO" accesskey="g" formmethod="GET" formaction="{{ url_for('heckyeahchat.chats_by_id') }}">
+                    <input id="get_ids_button" type="submit" value="GO" accesskey="g" formmethod="GET" formaction="{{ url_for('heckyeahchat.chats_by_id') }}"
+                        disabled>
                 </div>
     </form>
 </div>

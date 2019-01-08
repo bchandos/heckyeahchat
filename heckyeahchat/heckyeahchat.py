@@ -53,11 +53,13 @@ def chats_by_id():
     start_id = ids[0]
     stop_id = ids[-1]
 
+    user_conversation_id = g.user.conversation_id
+
     start_date = Message.query.get(start_id).date_time
     end_date = Message.query.get(stop_id).date_time
 
     messages = Message.query.filter(
-        Message.conversation_id == 'a4ayc/80/OGda4BO/1o/V0etpOqiLx1JwB5S3beHW0s=',
+        Message.conversation_id == user_conversation_id,
         Message.date_time.between(start_date, end_date)).all()
 
     return render_template('heckyeahchat/content.html', msgs=messages, start=start_date, end=end_date)
@@ -87,7 +89,7 @@ def letters(input):
 @bp.route('/__load_chats')
 @debug_only
 def import_csv():
-    input_filename = r'C:\Users\Bill\Documents\Python\heckyeahchat\heckyeahchat\data\allo_chat_messages_2018-12-07_16_22_58_PST.csv'
+    input_filename = 'path/to/allo/export.csv'
     with open(input_filename, encoding='utf-8') as in_csv:
         next(in_csv)
         for line in in_csv:
