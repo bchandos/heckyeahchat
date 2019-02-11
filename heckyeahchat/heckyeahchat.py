@@ -33,12 +33,12 @@ def get_chats(start_id=None, stop_id=None):
         end_date = datetime.strptime(request.args.get(
             'chat_end'), '%Y-%m-%d') + timedelta(hours=23, minutes=59, seconds=59)
         search = request.args.get('q')
-        if request.args.get('q'):
+        if search:
             messages = Message.query.filter(
                 Message.conversation_id == user_conversation_id,
                 Message.date_time >= start_date,
                 Message.date_time <= end_date,
-                Message.message.contains(request.args.get('q'))).all()
+                Message.message.contains(search)).all()
         else:
             messages = Message.query.filter(
                 Message.conversation_id == user_conversation_id,
